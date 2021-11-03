@@ -1,0 +1,34 @@
+{
+  "name": "react-next-app",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "debug": "NODE_OPTIONS='--inspect' next dev",
+    "build": "next build",
+    "start": "next start",
+    "stylelint": "stylelint \"**/*.css\" --fix"
+  },
+  "dependencies": {
+    "axios": "^0.24.0",
+    "date-fns": "^2.25.0",
+    "next": "^11.0.1-canary.4",
+    "react": "17.0.2",
+    "react-dom": "17.0.2"
+  },
+  "devDependencies": {
+    "@svgr/webpack": "^5.5.0",
+    "@types/classnames": "^2.3.1",
+    "@types/node": "^16.10.3",
+    "@types/react": "^17.0.28",
+    "@typescript-eslint/eslint-plugin": "^5.0.0",
+    "eslint": "7.32.0",
+    "eslint-config-next": "11.1.2",
+    "eslint-plugin-react-hooks": "^4.2.0",
+    "stylelint": "^13.13.1",
+    "stylelint-config-standard": "^22.0.0",
+    "stylelint-order": "^4.1.0",
+    "stylelint-order-config-standard": "^0.1.3",
+    "typescript": "^4.4.3"
+  }
+}
