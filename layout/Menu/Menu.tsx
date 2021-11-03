@@ -1,16 +1,15 @@
-import { MenuProps } from './Menu.props';
 import styles from './Menu.module.css';
 import cn from 'classnames';
-import { format } from 'date-fns'
+import React, { useContext } from "react";
+import { AppContext } from "../../context/app.context";
 
-export const Menu = ({ className, ...props }: MenuProps): JSX.Element => {
+export const Menu = (): JSX.Element => {
+    const { menu, setMenu, firstCategory } = useContext(AppContext);
     return (
-        <footer className={cn(className, styles.footer)} {...props}>
-            <div>
-                OwlTop © 2020 - {format(new Date(), 'yyyy')} Усі права захищені
-            </div>
-            <a href="#" target="_blank">Угода користувача</a>
-            <a href="#" target="_blank">Кофіденційність</a>
-        </footer>
+        <div>
+            <ul>
+                {menu.map(m => (<li key={m._id.secondCategory}>{m._id.secondCategory}</li>))}
+            </ul>
+        </div>
     );
 };
