@@ -1,12 +1,12 @@
 .wrapper {
 	display: grid;
-	grid-template-columns: auto 230px minmax(320px, 1200px) auto;
+	grid-template-columns: auto 250px minmax(320px, 1200px) auto;
 	grid-template-rows: auto 1fr auto;
 	grid-template-areas:
 		". header header ."
 		". sidebar main ."
 		"footer footer footer footer";
-	gap: 0 30px;
+	gap: 0 15px;
 
 	min-height: 100vh;
 }

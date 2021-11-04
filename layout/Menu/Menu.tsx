@@ -4,7 +4,7 @@ import { firstLevelMenuItem, PageItem } from "../../interfaces/menu.interface";
 import CoursesIcon from "./icons/courses.svg";
 import ServicesIcon from "./icons/services.svg";
 import BooksIcon from "./icons/books.svg";
-import GoodsIcon from "./icons/goods.svg";
+import GoodsIcon from "./icons/products.svg";
 import { TopLevelCategory } from "../../interfaces/page.interface";
 import cn from 'classnames';
 import styles from './Menu.module.css';
@@ -21,9 +21,9 @@ export const Menu = (): JSX.Element => {
 
     const buildFirstLevel = () => {
         return (
-            <>
+            <ul>
                 {firstLevelMenu.map(m => (
-                    <div key={m.route}>
+                    <li key={m.route}>
                         <a href={`/${m.route}`}>
                             <div className={cn(styles.firstLevel, {
                                 [styles.firstLevelActive]: m.id == firstCategory
@@ -33,9 +33,9 @@ export const Menu = (): JSX.Element => {
                             </div>
                         </a>
                         {m.id == firstCategory && buildSecondLevel(m)}
-                    </div>
+                    </li>
                 ))}
-            </>
+            </ul>
         );
     };
 
@@ -44,7 +44,7 @@ export const Menu = (): JSX.Element => {
             <div className={styles.secondBlock}>
                 {menu.map(m => (
                     <div key={m._id.secondCategory}>
-                        <div className={styles.secondLevel}>{m._id.secondCategory}</div>
+                        <span className={styles.secondLevel}>{m._id.secondCategory}</span>
                         <div className={cn(styles.secondLevelBlock, {
                             [styles.secondLevelBlockOpened]: m.isOpened
                         })}>
