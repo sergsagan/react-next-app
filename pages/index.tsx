@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Button, Title, Tag, Text, Rating } from '../components';
-import { withLayout } from '../layout/Layout'
+import { withLayout } from '../layout/Layout';
 import { GetStaticProps } from "next";
 import axios from "axios";
 import { MenuItem } from "../interfaces/menu.interface";
@@ -10,18 +10,18 @@ function Home({ menu }: HomeProps) : JSX.Element {
     const [rating, setRating] = useState<number>(0);
 
     useEffect(() => {
-        console.log('Counter', counter)
+        console.log('Counter', counter);
         return function cleanUp() {
-            console.log('Unmount')
-        }
+            console.log('Unmount');
+        };
     });
     
 
     useEffect(() => {
         if (counter > 0) {
-            console.log('Mounted')
+            console.log('Mounted');
         }
-    }, []);
+    }, [counter]);
 
     return (
     <>
@@ -51,7 +51,7 @@ export const getStaticProps: GetStaticProps<HomeProps> = async () => {
             menu,
             firstCategory
         }
-    }
+    };
 };
 
 interface HomeProps extends Record<string, unknown> {

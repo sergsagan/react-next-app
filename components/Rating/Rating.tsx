@@ -39,21 +39,21 @@ export const Rating = ({ isEditable = false, rating, setRating, ...props }: Rati
             return;
         }
         constructRating(i);
-    }
+    };
 
     const onClick = (i: number) => {
         if (!isEditable || !setRating) {
             return;
         }
         setRating(i);
-    }
+    };
 
     const handleSpace = (i:number, event: KeyboardEvent<SVGElement>) => {
         if (event.code != 'Space' || !setRating) {
-            return
+            return;
         }
         setRating(i);
-    }
+    };
 
     return (
         <div {...props}>

@@ -1,16 +1,16 @@
-import React, { useState } from "react";
+import React  from "react";
 import { withLayout } from '../../layout/Layout';
-import {GetStaticPaths, GetStaticPathsContext, GetStaticProps, GetStaticPropsContext} from "next";
+import {GetStaticPaths, GetStaticProps, GetStaticPropsContext} from "next";
 import axios from "axios";
 import { MenuItem } from "../../interfaces/menu.interface";
-import { TopPageModel } from "../../interfaces/page.interface";
+import {TopLevelCategory, TopPageModel} from "../../interfaces/page.interface";
 import { ProductModel } from "../../interfaces/product.interface";
 import { ParsedUrlQuery } from "querystring";
+import { firstLevelMenu } from "../../helpers/helpers";
 
 const domain = process.env.NEXT_PUBLIC_DOMAIN;
-const firstCategory = 0;
 
-function Course({ menu, page, products }: CourseProps) : JSX.Element {
+function Course({ products }: CourseProps) : JSX.Element {
     return (
         <>
             {products && products.length}
@@ -21,12 +21,18 @@ function Course({ menu, page, products }: CourseProps) : JSX.Element {
 export default withLayout(Course);
 
 export const getStaticPaths: GetStaticPaths = async () => {
-    const { data: menu } = await axios.post<MenuItem[]>(domain + '/api/top-page/find', {
-        firstCategory
-    });
-    
+    let paths: string[] = [];
+
+    for (const m of firstLevelMenu) {
+        const { data: menu } = await axios.post<MenuItem[]>(domain + '/api/top-page/find', {
+            firstCategory: m.id
+        });
+        
+        paths = paths.concat(menu.flatMap(s => s.pages.map(p => `/${m.route}/${p.alias}`)));
+    }
+    console.log(paths);
     return {
-        paths: menu.flatMap(m => m.pages.map(p => '/courses/' + p.alias)),
+        paths,
         fallback: true
     };
 };
@@ -35,11 +41,18 @@ export const getStaticProps: GetStaticProps<CourseProps> = async ({params}: GetS
     if (!params) {
         return {
             notFound: true
-        }
+        };
+    }
+    
+    const firstCategoryItem = firstLevelMenu.find(m => m.route == params.type);
+    if (!firstCategoryItem) {
+        return {
+            notFound: true
+        };
     }
 
     const { data: menu } = await axios.post<MenuItem[]>(domain + '/api/top-page/find', {
-        firstCategory
+        firstCategory: firstCategoryItem.id
     });
     const { data: page } = await axios.get<TopPageModel>(domain + '/api/top-page/byAlias/' + params.alias);
     const { data: products } = await axios.post<ProductModel[]>(domain + '/api/product/find', {
@@ -50,16 +63,16 @@ export const getStaticProps: GetStaticProps<CourseProps> = async ({params}: GetS
     return {
         props: {
             menu,
-            firstCategory,
+            firstCategory: firstCategoryItem.id,
             page,
             products
         }
-    }
+    };
 };
 
 interface CourseProps extends Record<string, unknown> {
     menu: MenuItem[];
-    firstCategory: number;
+    firstCategory: TopLevelCategory;
     page: TopPageModel;
     products: ProductModel[];
 }
