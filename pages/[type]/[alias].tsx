@@ -3,7 +3,7 @@ import { withLayout } from '../../layout/Layout';
 import {GetStaticPaths, GetStaticProps, GetStaticPropsContext} from "next";
 import axios from "axios";
 import { MenuItem } from "../../interfaces/menu.interface";
-import {TopLevelCategory, TopPageModel} from "../../interfaces/page.interface";
+import { TopLevelCategory, TopPageModel } from "../../interfaces/page.interface";
 import { ProductModel } from "../../interfaces/product.interface";
 import { ParsedUrlQuery } from "querystring";
 import { firstLevelMenu } from "../../helpers/helpers";
@@ -51,23 +51,34 @@ export const getStaticProps: GetStaticProps<CourseProps> = async ({params}: GetS
         };
     }
 
-    const { data: menu } = await axios.post<MenuItem[]>(domain + '/api/top-page/find', {
-        firstCategory: firstCategoryItem.id
-    });
-    const { data: page } = await axios.get<TopPageModel>(domain + '/api/top-page/byAlias/' + params.alias);
-    const { data: products } = await axios.post<ProductModel[]>(domain + '/api/product/find', {
-        category: page.category,
-        limit: 10
-    });
-
-    return {
-        props: {
-            menu,
-            firstCategory: firstCategoryItem.id,
-            page,
-            products
+    try {
+        const { data: menu } = await axios.post<MenuItem[]>(domain + '/api/top-page/find', {
+            firstCategory: firstCategoryItem.id
+        });
+        if (menu.length == 0) {
+            return {
+                notFound: true
+            };
         }
-    };
+        const { data: page } = await axios.get<TopPageModel>(domain + '/api/top-page/byAlias/' + params.alias);
+        const { data: products } = await axios.post<ProductModel[]>(domain + '/api/product/find', {
+            category: page.category,
+            limit: 10
+        });
+
+        return {
+            props: {
+                menu,
+                firstCategory: firstCategoryItem.id,
+                page,
+                products
+            }
+        };
+    } catch {
+        return {
+            notFound: true
+        };
+    }
 };
 
 interface CourseProps extends Record<string, unknown> {
